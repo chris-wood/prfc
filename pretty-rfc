@@ -1,0 +1,32 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+	echo "usage: $0 [file | url]"
+	echo " file - name of a TXT file to print"
+	echo " url  - URL to a draft TXT file to print"
+fi
+
+TARGET=$1
+
+print_rfc () 
+{
+	enscript -2rG -p - --line-numbers --color=1 -c $1 > out.ps
+	ps2pdf out.ps out.pdf
+	rm out.ps
+}
+
+if [ -f ${TARGET} ]; 
+then
+	print_rfc "$TARGET"
+else
+	if [[ $TARGET == http* ]];
+	then
+		curl -G $TARGET > __tmp.txt
+		print_rfc __tmp.txt
+		rm __tmp.txt
+	else
+		# Search for the version
+		echo "Target not found..."
+	fi
+fi
+
