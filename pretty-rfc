@@ -7,12 +7,13 @@ if [ "$#" -ne 1 ]; then
 fi
 
 TARGET=$1
+FNAME=`basename ${TARGET}`
 
 print_rfc () 
 {
-	enscript -2rG -p - --line-numbers --color=1 -c $1 > out.ps
-	ps2pdf out.ps out.pdf
-	rm out.ps
+	enscript -2rG -p - --line-numbers --color=1 -c $1 > ${FNAME}.ps
+	ps2pdf ${FNAME}.ps ${FNAME}.pdf
+	rm ${FNAME}.ps
 }
 
 if [ -f ${TARGET} ]; 
@@ -21,9 +22,9 @@ then
 else
 	if [[ $TARGET == http* ]];
 	then
-		curl -G $TARGET > __tmp.txt
-		print_rfc __tmp.txt
-		rm __tmp.txt
+        curl -G $TARGET > $FNAME
+		print_rfc $FNAME
+		rm $FNAME
 	else
 		# Search for the version
 		echo "Target not found..."
