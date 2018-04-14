@@ -1,6 +1,7 @@
 # prfc
+
 pretty print RFCs
 
-Dependencies:
+# Installation
 - enscript: `brew install enscript`
 - ps2pdf (ghostscript): `brew install ghostscript`
