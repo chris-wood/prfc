@@ -1,0 +1,72 @@
+#!/usr/bin/env ruby
+
+'''
+Overview:
+- Parse document name from URL, download text file and create review file
+- Fill out boilerplate SUMMARY, COMMENTS, NITS sections
+'''
+
+'''
+Document: draft-irtf-pearg-numeric-ids-history-01 [https://tools.ietf.org/id/draft-irtf-pearg-numeric-ids-history-01.txt]
+
+Assessment:
+
+Ready
+Ready with nits
+Ready with issues
+Almost ready
+Not ready
+
+Review Summary:
+
+TODO
+
+Comments:
+
+- TODO
+
+Nits:
+
+- TODO
+'''
+
+require 'uri'
+document_url = ARGV[0]
+if document_url == "" then
+    return -1
+end
+
+uri = URI.parse(document_url)
+path = uri.path.split("/")[-1]
+draft_name = File.basename(path, ".*")
+review_name = draft_name + "-review.txt"
+
+`curl -G #{document_url} > #{path}`
+`touch #{review_name}`
+
+File.open(review_name, 'w') { |file|
+    file.write("
+Document: #{draft_name} [#{document_url}]
+
+Assessment:
+
+Ready
+Ready with nits
+Ready with issues
+Almost ready
+Not ready
+
+Review Summary:
+
+TODO
+
+Comments:
+
+- TODO
+
+Nits:
+
+- TODO
+
+")
+}
